@@ -191,7 +191,7 @@ function car(a){
    x.save(); x.translate(tx,ty);
    x.fillStyle='#111513'; rr(-tireW/2,-tireH/2,tireW,tireH,Math.max(2,len*.07)); x.fill();
    x.strokeStyle='#343a36'; x.lineWidth=Math.max(1,len*.035);
-   for(let k=-2;k<=2;k++){x.beginPath();x.moveTo(-tireW*.40,k*tireH*.17);x.lineTo(tireW*.40,k*tireH*.17-len*.025);x.stroke();}
+   for(let k=-2;k<=2;k++){x.beginPath();x.moveTo(-tireW*.40,k*tireH*.17);x.lineTo(tireW*.40,k*tireH*.17);x.stroke();}
    x.strokeStyle='#080b09';x.lineWidth=Math.max(1,len*.018);x.strokeRect(-tireW*.42,-tireH*.42,tireW*.84,tireH*.84);
    x.restore();
  }
