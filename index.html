@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="theme-color" content="#13251c"><meta name="dgp-version" content="v64-stage2"><title>Desk Grand Prix v64</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="theme-color" content="#13251c"><meta name="dgp-version" content="v65-points"><title>Desk Grand Prix v65</title>
 <style>
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#13251c;color:#f5f4df;font-family:system-ui,-apple-system,sans-serif;touch-action:none}#game{position:relative;width:100vw;height:100dvh;overflow:hidden;background:#193a2a}canvas{width:100%;height:100%;display:block}.hud{position:absolute;top:env(safe-area-inset-top,8px);left:0;right:0;padding:10px 12px;display:flex;justify-content:space-between;pointer-events:none}.pill{background:#0b1b13dd;border:1px solid #ffffff2b;border-radius:13px;padding:7px 11px;min-width:70px}.small{font-size:10px;letter-spacing:.12em;opacity:.75;font-weight:900}.big{font-size:23px;font-weight:1000;line-height:1.1}#status{position:absolute;top:75px;left:50%;transform:translateX(-50%);background:#102319e8;border-radius:99px;padding:7px 12px;font-size:11px;font-weight:900;white-space:nowrap;pointer-events:none}#steerWrap{position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);left:12px;right:12px;display:flex;justify-content:space-between;pointer-events:none;gap:12px} .steer{pointer-events:auto;width:min(23vw,100px);height:82px;border:2px solid #ffffff88;border-radius:18px;background:linear-gradient(#4c91d9,#245a9b);color:white;font-size:30px;font-weight:1000;box-shadow:0 6px 0 #173d6c;touch-action:none;user-select:none} .steer.active{transform:translateY(5px);box-shadow:0 1px 0 #173d6c} #brakeWrap{display:none;position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);left:0;right:0;justify-content:center;pointer-events:none}
 #turbo{pointer-events:auto;position:relative;z-index:30;display:block;margin-top:8px;width:100%;border:2px solid #ffe66d;border-radius:14px;padding:10px 12px;background:linear-gradient(135deg,#f7b928,#f06a26);color:#241407;font-weight:1000;letter-spacing:.08em;box-shadow:0 5px 0 #7c351b;font-size:15px;touch-action:manipulation; -webkit-tap-highlight-color:transparent; user-select:none}
@@ -103,6 +103,7 @@
  <li>ジャンプ台（JUMP!）は加速。ミルク・マッチ棒・画鋲・セロテープは減速します。</li>
  <li>⚡ターボは1レースに1回、約3.6秒加速します。</li>
  <li>STAGE 1は机の上、STAGE 2はテーブルの上（グリーンピースとにんじんのグラッセのコース。ソース・砂糖・ケチャップ・ハチミツは減速、チーズはジャンプ台）。オンラインではホストが選んだステージで走ります。</li>
+ <li>各ステージの順位でポイントが入ります（1位5・2位3・3位1・4位0）。STAGE 1のあとに結果とポイントを表示し、STAGE 2へ進みます。</li>
  <li>オンライン対戦は最大4人。人数が足りない分はAIが走ります。</li>
  <li>3周してゴールを目指します。スタート前に、コース全体のプレビューが流れます（1人用はタップでスキップ）。</li></ul>
  <button class="tt-close" data-close>閉じる</button></div></div>
@@ -118,7 +119,7 @@
 const SLOT_COLORS=['#e9f35b','#52d8ff','#ff604e','#f5f3e9'];   // car colour per player slot: host yellow, then blue, red, white
 const NOSOUND=/[?&]nosound\b/.test(location.search);
 const SET={music:true,sfx:true,stage:1};try{Object.assign(SET,JSON.parse(localStorage.getItem('dgp_set')||'{}'))}catch(e){}
-const CREDITS=['Desk Grand Prix v64','使用素材（ファイル名）：','BGM：lnplusmusic-retro-vintage-rock-and-roll','ジングル：jingle_12','ブレーキ音：車のブレーキ'];   // edit this list to show the proper credits
+const CREDITS=['Desk Grand Prix v65','使用素材（ファイル名）：','BGM：lnplusmusic-retro-vintage-rock-and-roll','ジングル：jingle_12','ブレーキ音：車のブレーキ'];   // edit this list to show the proper credits
 function saveSet(){try{localStorage.setItem('dgp_set',JSON.stringify(SET))}catch(e){}}
 function refreshSet(){for(const [id,k,l] of [['setMusic','music','🎵 音楽 '],['setSfx','sfx','🔊 効果音 ']]){const b=document.getElementById(id);if(!b)continue;b.classList.toggle('off',!SET[k]);b.innerHTML=l+'<b>'+(SET[k]?'ON':'OFF')+'</b>'}}
 document.addEventListener('click',e=>{if(e.target&&e.target.closest&&e.target.closest('#startNet')){closePanels();const b=document.getElementById('start');if(b)b.click()}});
@@ -321,7 +322,7 @@ function setupGuest(c){
   if(d.type==='welcome'){netSlot=d.slot|0}
   else if(d.type==='lobby'){if(!raceInit&&!active)netStatus('参加者 '+d.n+'/4。ホストがレースを開始するまでお待ちください。')}
   else if(d.type==='full'){netStatus('この部屋は満員か、すでにレースが始まっています。');netMode='solo';conn=null;$('start').textContent='SOLO RACE'}
-  else if(d.type==='start'&&!active&&!raceInit&&netMode==='guest'){raceSeed=d.seed|0;netSlot=d.slot|0;netHumans=d.humans||2;netStage=d.stage||1;init(true)}
+  else if(d.type==='start'&&!active&&!raceInit&&netMode==='guest'){raceSeed=d.seed|0;netSlot=d.slot|0;netHumans=d.humans||2;netStage=d.stage||1;cupStage=netStage;if(d.cup)cupRes=[];init(true)}
   else if(d.type==='states'){const now=performance.now();for(const car of d.cars){if(car.slot===netSlot)continue;remotes[car.slot]={car,last:now}}}
   else if(d.type==='finish'){netStatus(slotName(d.slot)+'の車がゴールしました。')}
   else if(d.type==='gone'){delete remotes[d.slot];netStatus(slotName(d.slot)+'が退出しました。')}
@@ -349,21 +350,23 @@ function startPressed(e){
  if(raceInit)return;
  try{
   if(netMode==='guest'){netStatus('ホストが開始します。しばらくお待ちください。');return}
+  if(cupNextPending){cupNextPending=false;cupStage=2;cupNew=false}else{cupStage=SET.stage||1;cupRes=[];cupNew=true}   // STAGE 1 -> results/points -> STAGE 2
   if(netMode==='host'){
    conns=liveConns();conns.forEach((en,i)=>{en.slot=i+1});netHumans=1+conns.length;netSlot=0;
    raceSeed=(Math.random()*1e9)|0;roomLocked=true;
-   conns.forEach(en=>sendTo(en.c,{type:'start',seed:raceSeed,slot:en.slot,humans:netHumans,stage:SET.stage||1}));
+   conns.forEach(en=>sendTo(en.c,{type:'start',seed:raceSeed,slot:en.slot,humans:netHumans,stage:cupStage,cup:cupNew?1:0}));
   }
   safeInit();
  }catch(err){try{window.__dgpErr&&window.__dgpErr('start: '+(err&&err.message||err))}catch(_){}}
 }
 let steering=0;
+let cupStage=1,cupNextPending=false,cupNew=true,cupRes=[],endToken=0;const PTS=[0,5,3,1,0];   // grand-prix points by finishing position
 let obstacleCooldown=0;let obstacleBursts=[];
 let playerLane=1;
 let swipeStartX=null;
 let startSequenceToken=0;
 let turboCooldown=0;function safeInit(){try{init(false)}catch(err){try{window.__dgpErr&&window.__dgpErr('start: '+(err&&err.message||err))}catch(_){}}}
-function init(fromNet=false){audioInit();hideSignal();clearTimeout(introTimer);intro.on=false;jingleCancel(true);setStage(netMode==='guest'?netStage:(SET.stage||1));if(netMode==='solo')raceSeed=(Math.random()*1e9)|0;layoutCache.clear();look.x=0;look.y=1;if(netMode==='guest'&&!fromNet){netStatus('ホストがレースを開始するまでお待ちください。');return}time=0;done=false;turboCooldown=0;turboUsed=false;obstacleCooldown=0;obstacleBursts=[];const N=netMode==='solo'?1:Math.max(1,Math.min(4,netHumans||1)),me=netMode==='guest'?netSlot:0,sp=startPerm(),aiLanes=sp.slice(N),aiColors=SLOT_COLORS.slice(N);playerLane=sp[me];remotes={};if(netMode!=='solo'){for(let s=0;s<N;s++){if(s===me)continue;remotes[s]={car:{slot:s,t:1-46/PERI,s:0,off:laneU(sp[s]),lap:-1,color:SLOT_COLORS[s]},last:performance.now()+30000}}}player={id:0,color:SLOT_COLORS[me],boostTimer:0,boostFx:0,perfectBrake:0,t:1-46/PERI,s:.61,off:laneU(playerLane),lane:playerLane,slip:0,wobble:0,spinAngle:0,spinFx:0,spinTimer:0,spinLap:0,lap:-1,pen:0,flash:0,rank:4,screenPen:0,jump:0,bounce:0,hazard:'',hazardLock:0};ais=[{id:1,color:aiColors[0],t:1-46/PERI,s:.58,off:laneU(aiLanes[0]),slip:0,wobble:0,lap:-1,pen:0,skill:.85,lane:aiLanes[0],screenPen:0,jump:0,bounce:0,hazard:'',hazardLock:0},{id:2,color:aiColors[1],t:1-46/PERI,s:.57,off:laneU(aiLanes[1]),slip:0,wobble:0,lap:-1,pen:0,skill:.72,lane:aiLanes[1],screenPen:0,jump:0,bounce:0,hazard:'',hazardLock:0},{id:3,color:aiColors[2],t:1-46/PERI,s:.56,off:laneU(aiLanes[2]??3),slip:0,wobble:0,lap:-1,pen:0,skill:.9,lane:aiLanes[2]??3,screenPen:0,jump:0,bounce:0,hazard:'',hazardLock:0}];ais=ais.slice(0,4-N);active=false;last=performance.now();braking=false;steering=0;$('overlay').style.display='none';$('brakeWrap').style.display='flex';if(netMode!=='solo'){netStatus('対戦中：'+N+'人で対戦！障害物をかわしてターボで勝負！')}
+function init(fromNet=false){audioInit();hideSignal();clearTimeout(introTimer);intro.on=false;jingleCancel(true);setStage(cupStage);if(netMode==='solo')raceSeed=(Math.random()*1e9)|0;layoutCache.clear();look.x=0;look.y=1;if(netMode==='guest'&&!fromNet){netStatus('ホストがレースを開始するまでお待ちください。');return}time=0;done=false;turboCooldown=0;turboUsed=false;obstacleCooldown=0;obstacleBursts=[];const N=netMode==='solo'?1:Math.max(1,Math.min(4,netHumans||1)),me=netMode==='guest'?netSlot:0,sp=startPerm(),aiLanes=sp.slice(N),aiColors=SLOT_COLORS.slice(N);playerLane=sp[me];remotes={};if(netMode!=='solo'){for(let s=0;s<N;s++){if(s===me)continue;remotes[s]={car:{slot:s,t:1-46/PERI,s:0,off:laneU(sp[s]),lap:-1,color:SLOT_COLORS[s]},last:performance.now()+30000}}}player={id:0,color:SLOT_COLORS[me],boostTimer:0,boostFx:0,perfectBrake:0,t:1-46/PERI,s:.61,off:laneU(playerLane),lane:playerLane,slip:0,wobble:0,spinAngle:0,spinFx:0,spinTimer:0,spinLap:0,lap:-1,pen:0,flash:0,rank:4,screenPen:0,jump:0,bounce:0,hazard:'',hazardLock:0};ais=[{id:1,color:aiColors[0],t:1-46/PERI,s:.58,off:laneU(aiLanes[0]),slip:0,wobble:0,lap:-1,pen:0,skill:.85,lane:aiLanes[0],screenPen:0,jump:0,bounce:0,hazard:'',hazardLock:0},{id:2,color:aiColors[1],t:1-46/PERI,s:.57,off:laneU(aiLanes[1]),slip:0,wobble:0,lap:-1,pen:0,skill:.72,lane:aiLanes[1],screenPen:0,jump:0,bounce:0,hazard:'',hazardLock:0},{id:3,color:aiColors[2],t:1-46/PERI,s:.56,off:laneU(aiLanes[2]??3),slip:0,wobble:0,lap:-1,pen:0,skill:.9,lane:aiLanes[2]??3,screenPen:0,jump:0,bounce:0,hazard:'',hazardLock:0}];ais=ais.slice(0,4-N);active=false;last=performance.now();braking=false;steering=0;$('overlay').style.display='none';$('brakeWrap').style.display='flex';if(netMode!=='solo'){netStatus('対戦中：'+N+'人で対戦！障害物をかわしてターボで勝負！')}
  const token=++startSequenceToken, music=$('raceMusic');
  // Safari requires audio playback to be initiated from the user's tap. Start silently, then unmute on GO.
  bgmStop();
@@ -476,7 +479,19 @@ function camera(){const zN=Math.min(2.55,Math.max(2.05,Math.min(W,H)/300*2.2));
 function updateLook(dt){const ld=player;if(!ld)return;const n=tan(ld.t),k=Math.min(1,dt*3);look.x+=(n.x-look.x)*k;look.y+=(n.y-look.y)*k}
 function recoverTrailingCars(dt){}
 function hud(){if(!player)return;$('lap').textContent=Math.max(1,Math.min(player.lap+1,3))+' / 3';let racers=[player,...ais,...remoteCars()];let order=racers.sort((a,b)=>progress(b)-progress(a));player.rank=order.indexOf(player)+1;$('pos').textContent=rankLabel(player.rank);$('speed').textContent=Math.round(Math.min(100,player.s/.92*100));$('status').textContent=player.boostTimer>0?'TURBO BOOST! — FULL THROTTLE':dodgeText()}
-function end(){active=false;done=true;raceInit=false;toast('🏁 FINISH!');bgmStop();if(netMode!=='solo')sendNet({type:'finish',slot:netSlot});if(netMode==='host')roomLocked=false;setTimeout(()=>{$('overlay').classList.remove('title');$('card').innerHTML=`<div class="eyebrow">RACE COMPLETE</div><div class="logo">${player.rank===1?'YOU WIN!':rankLabel(player.rank)+' PLACE'}</div><div class="subtitle">最終順位 <b>${player.rank}位 / 4台</b><br>タイム <b>${fmt(time)}</b></div><div class="rules"><div class="rule"><b>${player.lap}</b>周完走</div><div class="rule"><b>${Math.round(player.s/.82*100)}%</b>最終速度</div><div class="rule"><b>${player.rank===1?'GOLD':'RETRY'}</b>RESULT</div></div><button class="cta" id="start">RACE AGAIN ↻</button><div class="note">ヒント：障害物は左右スワイプで避けよう。ぶつかると大きく減速します。⚡ TURBOは1レースに1回、約3.6秒加速。ジャンプ台は加速、ミルク・マッチ棒・画鋲・セロテープは減速。</div>`;$('overlay').style.display='flex';$('brakeWrap').style.display='none';$('start').addEventListener('click',startPressed);if(netMode==='guest'){const rb=$('start');rb.textContent='ホストの再開始を待っています…';rb.style.opacity='.6'}},450)}
+function end(){active=false;done=true;raceInit=false;toast('🏁 FINISH!');bgmStop();if(netMode!=='solo')sendNet({type:'finish',slot:netSlot});if(netMode==='host')roomLocked=false;
+ const tk=++endToken,rk=player.rank,tm=time,st=cupStage,pt=PTS[rk]||0,lp=player.lap,sp=Math.round(player.s/.82*100);cupRes[st-1]=pt;
+ setTimeout(()=>{if(tk!==endToken||raceInit||active)return;
+  // 1) result: position and time
+  $('overlay').classList.remove('title');$('card').innerHTML=`<div class="eyebrow">STAGE ${st} COMPLETE</div><div class="logo">${rk===1?'YOU WIN!':rankLabel(rk)+' PLACE'}</div><div class="subtitle">最終順位 <b>${rk}位 / 4台</b><br>タイム <b>${fmt(tm)}</b></div><div class="rules"><div class="rule"><b>${lp}</b>周完走</div><div class="rule"><b>${sp}%</b>最終速度</div><div class="rule"><b>${rk===1?'GOLD':'RETRY'}</b>RESULT</div></div><div class="note">ポイント集計中…</div>`;
+  $('overlay').style.display='flex';$('brakeWrap').style.display='none';
+  // 2) points: 1st 5 / 2nd 3 / 3rd 1 / 4th 0, then on to the next stage
+  setTimeout(()=>{if(tk!==endToken||raceInit||active)return;
+   const total=cupRes.reduce((a,b)=>a+(b||0),0),cell=i=>cupRes[i]===undefined?'—':'+'+cupRes[i],last=st>=2;cupNextPending=!last;
+   $('card').innerHTML=`<div class="eyebrow">STAGE ${st} POINTS</div><div class="logo">+${pt} PT</div><div class="subtitle">${rk}位 → <b>${pt}ポイント</b><br><span style="opacity:.75">1位 5pt ／ 2位 3pt ／ 3位 1pt ／ 4位 0pt</span></div><div class="rules"><div class="rule"><b>${cell(0)}</b>STAGE 1</div><div class="rule"><b>${cell(1)}</b>STAGE 2</div><div class="rule"><b>${total}</b>TOTAL</div></div><button class="cta" id="start">${last?'RACE AGAIN ↻':'STAGE 2 へ ▶'}</button><div class="note">${last?'2ステージの合計ポイントです。':'次はSTAGE 2（テーブル）です。'}</div>`;
+   $('start').addEventListener('click',startPressed);
+   if(netMode==='guest'){const rb=$('start');rb.textContent=last?'ホストの再開始を待っています…':'ホストの開始を待っています…';rb.style.opacity='.6'}
+  },2600)},450)}
 function fmt(s){return Math.floor(s/60)+':'+(s%60).toFixed(2).padStart(5,'0')}
 function rr(a,b,w,h,r){x.beginPath();x.roundRect(a,b,w,h,r)}
 
