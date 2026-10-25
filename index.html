@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="theme-color" content="#13251c"><meta name="dgp-version" content="v68"><title>Desk Grand Prix v68</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="theme-color" content="#13251c"><meta name="dgp-version" content="v69"><title>Desk Grand Prix v69</title>
 <style>
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#13251c;color:#f5f4df;font-family:system-ui,-apple-system,sans-serif;touch-action:none}#game{position:relative;width:100vw;height:100dvh;overflow:hidden;background:#193a2a}canvas{width:100%;height:100%;display:block}.hud{position:absolute;top:env(safe-area-inset-top,8px);left:0;right:0;padding:10px 12px;display:flex;justify-content:space-between;pointer-events:none}.pill{background:#0b1b13dd;border:1px solid #ffffff2b;border-radius:13px;padding:7px 11px;min-width:70px}.small{font-size:10px;letter-spacing:.12em;opacity:.75;font-weight:900}.big{font-size:23px;font-weight:1000;line-height:1.1}#status{position:absolute;top:75px;left:50%;transform:translateX(-50%);background:#102319e8;border-radius:99px;padding:7px 12px;font-size:11px;font-weight:900;white-space:nowrap;pointer-events:none}#steerWrap{position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);left:12px;right:12px;display:flex;justify-content:space-between;pointer-events:none;gap:12px} .steer{pointer-events:auto;width:min(23vw,100px);height:82px;border:2px solid #ffffff88;border-radius:18px;background:linear-gradient(#4c91d9,#245a9b);color:white;font-size:30px;font-weight:1000;box-shadow:0 6px 0 #173d6c;touch-action:none;user-select:none} .steer.active{transform:translateY(5px);box-shadow:0 1px 0 #173d6c} #brakeWrap{display:none;position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);left:0;right:0;justify-content:center;pointer-events:none}
 #turbo{pointer-events:auto;position:relative;z-index:30;display:block;margin-top:8px;width:100%;border:2px solid #ffe66d;border-radius:14px;padding:10px 12px;background:linear-gradient(135deg,#f7b928,#f06a26);color:#241407;font-weight:1000;letter-spacing:.08em;box-shadow:0 5px 0 #7c351b;font-size:15px;touch-action:manipulation; -webkit-tap-highlight-color:transparent; user-select:none}
@@ -72,10 +72,34 @@
 .tt-toggle.off b{background:#555;color:#ddd}
 @media (max-height:700px) and (orientation:portrait){.tt-top{margin-top:0}.lg.l1{font-size:min(22vw,100px)}.lg.l2{font-size:min(11vw,52px)}.tt-btns{gap:8px}.tt-solo,.tt-two{padding:3.4vw 4vw}.tt-hero{height:calc(var(--hw)*.16)}}
 @media (orientation:landscape) and (max-height:520px){.tt{gap:10px}.tt-hero{display:none}.tt-btns{flex-direction:row;flex-wrap:wrap}.tt-solo,.tt-two{width:48%;padding:12px 8px;font-size:20px}.lg.l1{font-size:70px}.lg.l2{font-size:40px}}
+.rt{width:100%;margin:12px 0 8px;display:flex;flex-direction:column;gap:6px}
+.rr{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:12px;background:#ffffff0a;border:1px solid #ffffff18;font-size:14px;font-weight:800;text-align:left;color:#fff}
+.rr.me{background:#d9ff5a22;border-color:#d9ff5aaa}
+.rr .no{width:34px;flex:none;font:900 italic 14px/1 system-ui;color:#d9ff5a}
+.rr .nm{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rr .nm.sm{flex:none;width:70px;font-size:13px}
+.rr .tm{font:800 14px/1 ui-monospace,Menlo,monospace}
+.rr .pt{font:900 italic 16px/1 system-ui;color:#d9ff5a;min-width:30px;text-align:right}
+.cp{display:inline-block;flex:none;width:26px;height:15px;border-radius:5px;border:2px solid #0007;box-sizing:border-box;position:relative}
+.cp::before{content:"";position:absolute;left:3px;right:3px;top:3px;height:4px;border-radius:2px;background:#0000004d}
+.cp.big{width:44px;height:25px;border-radius:8px;border-width:3px}.cp.big::before{top:5px;height:6px;left:5px;right:5px}
+.sb{flex:1;height:16px;border-radius:8px;background:#ffffff14;display:flex;overflow:hidden}
+.sb i{display:block;height:100%;transform-origin:left;animation:sbg .8s ease-out both}
+@keyframes sbg{from{transform:scaleX(0)}}
+.lg{display:flex;justify-content:center;gap:12px;font-size:11px;font-weight:800;opacity:.85;margin-bottom:8px}
+.lg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.pw{position:relative;overflow:hidden;padding:2px 0 10px}
+.pod{display:flex;align-items:flex-end;justify-content:center;gap:8px;margin:12px 0 10px}
+.pod .col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0}
+.pod .pn{font-size:12px;font-weight:900;white-space:nowrap}.pod .pp{font:900 italic 13px/1 system-ui;color:#d9ff5a;margin-bottom:2px}
+.pod .blk{width:100%;border-radius:10px 10px 0 0;text-align:center;font:1000 italic 30px/1 system-ui;padding-top:8px;color:#1b1400;box-shadow:inset 0 2px 0 #ffffff80}
+.pod .b1{height:118px;background:linear-gradient(#ffe45a,#e8a800)}.pod .b2{height:86px;background:linear-gradient(#f4f6f8,#aab2ba)}.pod .b3{height:62px;background:linear-gradient(#f0b27a,#b8692c)}
+.cf{position:absolute;top:-14px;width:7px;height:11px;border-radius:2px;opacity:.9;animation:cff 3s linear infinite;pointer-events:none}
+@keyframes cff{to{transform:translateY(560px) rotate(540deg);opacity:.2}}
 </style><script>(function(){var n=0;function show(m){try{if(n++>2)return;var d=document.getElementById('errbar');if(!d){d=document.createElement('div');d.id='errbar';d.style.cssText='position:fixed;left:0;right:0;top:0;z-index:99999;background:#b00020;color:#fff;font:12px/1.35 system-ui,sans-serif;padding:6px 10px;white-space:pre-wrap;word-break:break-all';d.onclick=function(){d.remove()};(document.body||document.documentElement).appendChild(d)}d.textContent+=(d.textContent?'\n':'')+'\u26a0 '+m}catch(e){}}window.__dgpErr=show;window.addEventListener('error',function(e){show((e.message||'error')+(e.lineno?' @'+e.lineno:''))});window.addEventListener('unhandledrejection',function(e){show('promise: '+((e.reason&&e.reason.message)||e.reason))})})();</script>
 <script async src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script></head><body><div id="game"><canvas id="c"></canvas><div class="hud"><div class="pill"><div class="small">LAP</div><div class="big" id="lap">1 / 3</div></div><div class="pill"><div class="small">POSITION</div><div class="big" id="pos">4TH</div></div><div class="pill" style="text-align:right"><div class="small">SPEED</div><div class="big"><span id="speed">100</span><span style="font-size:11px">%</span></div></div></div><div id="status">DODGE THE DESK OBSTACLES!</div><div id="event"></div><div id="startSignal"><i class="lamp"></i><i class="lamp"></i><i class="lamp"></i></div><div id="tip">アクセル自動！左右スワイプで4車線を移動。障害物を避けてターボで追い抜け！</div><div id="brakeWrap"><button id="turbo">⚡ TURBO<span id="turboLabel">タップで一気に加速！（1回だけ）</span></button></div><div id="overlay" class="title"><div class="card" id="card"><div class="tt">
 <div class="tt-bg" id="ttBg"></div>
-<div class="tt-vtag">v68</div>
+<div class="tt-vtag">v69</div>
 <div class="tt-top">
  <div class="tt-logo"><span class="flag fl"></span><span class="flag fr"></span><span class="lg l1" data-t="Desk"><i>Desk</i></span><span class="lg l2" data-t="Grand Prix"><i>Grand Prix</i></span></div>
  <div class="tt-tag"><span>Mini 4WD Racing on Your Desk</span></div>
@@ -87,7 +111,7 @@
  <button class="tt-two" data-open="panel2p">ONLINE RACE<small>2–4 PLAYERS</small></button>
  <div class="tt-small"><button data-open="panelHow">❔ HOW TO</button><button data-open="panelSet">⚙️ SETTING</button><button data-open="panelCred">🏆 CREDITS</button></div>
  <div class="tt-status" id="ttStatus"></div>
- <div class="tt-ver">DESK GRAND PRIX <span id="verTxt">v68</span> <span id="boot">· 読み込み中…</span></div>
+ <div class="tt-ver">DESK GRAND PRIX <span id="verTxt">v69</span> <span id="boot">· 読み込み中…</span></div>
 </div>
 <div class="tt-panel" id="panel2p"><div class="tt-pcard"><h3>🌐 オンライン対戦（2〜4人）</h3>
  <button class="cta" id="host" style="font-size:14px;padding:11px;margin-bottom:8px">部屋を作る（ホスト）</button>
@@ -103,7 +127,7 @@
  <li>ジャンプ台（JUMP!）は加速。ミルク・マッチ棒・画鋲・セロテープは減速します。</li>
  <li>⚡ターボは1レースに1回、約3.6秒加速します。</li>
  <li>STAGE 1は机の上、STAGE 2はテーブルの上（グリーンピースとにんじんのグラッセのコース。ソース・砂糖・ケチャップ・ハチミツは減速、チーズはジャンプ台）。STAGE 3はビリヤード台の上（チョークで描いたコース。チョークの粉やかけらは減速、チョークと8ボールが障害物）。STAGE 4は砂浜（貝がらとヒトデと小石のコース。水たまり・海藻・ウニ・クラゲは減速、カニとヤドカリとビーチボールが障害物）。オンラインではホストが選んだステージから全員で走ります。</li>
- <li>各ステージの順位でポイントが入ります（1位5・2位3・3位1・4位0）。各ステージのあとに結果とポイントを表示し、次のステージへ進みます（選んだステージからSTAGE 4まで）。</li>
+ <li>各ステージの順位でポイントが入ります（1位5・2位3・3位1・4位0）。各ステージのあとに全車の結果とポイント、積み上げの総合結果を表示し、次のステージへ進みます（選んだステージからSTAGE 4まで）。STAGE 4のあとは表彰式です。</li>
  <li>オンライン対戦は最大4人。人数が足りない分はAIが走ります。</li>
  <li>3周してゴールを目指します。スタート前に、コース全体のプレビューが流れます（1人用はタップでスキップ）。</li></ul>
  <button class="tt-close" data-close>閉じる</button></div></div>
@@ -119,7 +143,7 @@
 const SLOT_COLORS=['#e9f35b','#52d8ff','#ff604e','#f5f3e9'];   // car colour per player slot: host yellow, then blue, red, white
 const NOSOUND=/[?&]nosound\b/.test(location.search);
 const SET={music:true,sfx:true,stage:1};try{Object.assign(SET,JSON.parse(localStorage.getItem('dgp_set')||'{}'))}catch(e){}
-const APP_VERSION='v68';   // <- bump this only: title, top-right tag, credits and meta all follow
+const APP_VERSION='v69';   // <- bump this only: title, top-right tag, credits and meta all follow
 const CREDITS=['Desk Grand Prix '+APP_VERSION,'使用素材（ファイル名）：','BGM：lnplusmusic-retro-vintage-rock-and-roll','ジングル：jingle_12','ブレーキ音：車のブレーキ'];   // edit this list to show the proper credits
 function saveSet(){try{localStorage.setItem('dgp_set',JSON.stringify(SET))}catch(e){}}
 function refreshSet(){for(const [id,k,l] of [['setMusic','music','🎵 音楽 '],['setSfx','sfx','🔊 効果音 ']]){const b=document.getElementById(id);if(!b)continue;b.classList.toggle('off',!SET[k]);b.innerHTML=l+'<b>'+(SET[k]?'ON':'OFF')+'</b>'}}
@@ -332,7 +356,7 @@ function setupGuest(c){
   if(d.type==='welcome'){netSlot=d.slot|0}
   else if(d.type==='lobby'){if(!raceInit&&!active)netStatus('参加者 '+d.n+'/4。ホストがレースを開始するまでお待ちください。')}
   else if(d.type==='full'){netStatus('この部屋は満員か、すでにレースが始まっています。');netMode='solo';conn=null;$('start').textContent='SOLO RACE'}
-  else if(d.type==='start'&&!active&&!raceInit&&netMode==='guest'){raceSeed=d.seed|0;netSlot=d.slot|0;netHumans=d.humans||2;netStage=d.stage||1;cupStage=netStage;if(d.cup)cupRes=[];init(true)}
+  else if(d.type==='start'&&!active&&!raceInit&&netMode==='guest'){raceSeed=d.seed|0;netSlot=d.slot|0;netHumans=d.humans||2;netStage=d.stage||1;cupStage=netStage;if(d.cup){cupRes=[];cupTbl={}}init(true)}
   else if(d.type==='states'){const now=performance.now();for(const car of d.cars){if(car.slot===netSlot)continue;remotes[car.slot]={car,last:now}}}
   else if(d.type==='finish'){netStatus(slotName(d.slot)+'の車がゴールしました。')}
   else if(d.type==='gone'){delete remotes[d.slot];netStatus(slotName(d.slot)+'が退出しました。')}
@@ -360,7 +384,7 @@ function startPressed(e){
  if(raceInit)return;
  try{
   if(netMode==='guest'){netStatus('ホストが開始します。しばらくお待ちください。');return}
-  if(cupNextPending){cupNextPending=false;cupStage=Math.min(4,cupStage+1);cupNew=false}else{cupStage=SET.stage||1;cupRes=[];cupNew=true}   // STAGE 1 -> results/points -> STAGE 2
+  if(cupNextPending){cupNextPending=false;cupStage=Math.min(4,cupStage+1);cupNew=false}else{cupStage=SET.stage||1;cupRes=[];cupTbl={};cupNew=true}   // STAGE 1 -> results/points -> STAGE 2
   if(netMode==='host'){
    conns=liveConns();conns.forEach((en,i)=>{en.slot=i+1});netHumans=1+conns.length;netSlot=0;
    raceSeed=(Math.random()*1e9)|0;roomLocked=true;
@@ -370,13 +394,13 @@ function startPressed(e){
  }catch(err){try{window.__dgpErr&&window.__dgpErr('start: '+(err&&err.message||err))}catch(_){}}
 }
 let steering=0;
-let cupStage=1,cupNextPending=false,cupNew=true,cupRes=[],endToken=0;const PTS=[0,5,3,1,0];   // grand-prix points by finishing position
+let cupStage=1,cupNextPending=false,cupNew=true,cupRes=[],endToken=0,finTimes={},cupTbl={};const PTS=[0,5,3,1,0];   // grand-prix points by finishing position
 let obstacleCooldown=0;let obstacleBursts=[];
 let playerLane=1;
 let swipeStartX=null;
 let startSequenceToken=0;
 let turboCooldown=0;function safeInit(){try{init(false)}catch(err){try{window.__dgpErr&&window.__dgpErr('start: '+(err&&err.message||err))}catch(_){}}}
-function init(fromNet=false){audioInit();hideSignal();clearTimeout(introTimer);intro.on=false;jingleCancel(true);setStage(cupStage);if(netMode==='solo')raceSeed=(Math.random()*1e9)|0;layoutCache.clear();look.x=0;look.y=1;if(netMode==='guest'&&!fromNet){netStatus('ホストがレースを開始するまでお待ちください。');return}time=0;done=false;turboCooldown=0;turboUsed=false;obstacleCooldown=0;obstacleBursts=[];const N=netMode==='solo'?1:Math.max(1,Math.min(4,netHumans||1)),me=netMode==='guest'?netSlot:0,sp=startPerm(),aiLanes=sp.slice(N),aiColors=SLOT_COLORS.slice(N);playerLane=sp[me];remotes={};if(netMode!=='solo'){for(let s=0;s<N;s++){if(s===me)continue;remotes[s]={car:{slot:s,t:1-46/PERI,s:0,off:laneU(sp[s]),lap:-1,color:SLOT_COLORS[s]},last:performance.now()+30000}}}player={id:0,color:SLOT_COLORS[me],boostTimer:0,boostFx:0,perfectBrake:0,t:1-46/PERI,s:.61,off:laneU(playerLane),lane:playerLane,slip:0,wobble:0,spinAngle:0,spinFx:0,spinTimer:0,spinLap:0,lap:-1,pen:0,flash:0,rank:4,screenPen:0,jump:0,bounce:0,hazard:'',hazardLock:0};ais=[{id:1,color:aiColors[0],t:1-46/PERI,s:.58,off:laneU(aiLanes[0]),slip:0,wobble:0,lap:-1,pen:0,skill:.85,lane:aiLanes[0],screenPen:0,jump:0,bounce:0,hazard:'',hazardLock:0},{id:2,color:aiColors[1],t:1-46/PERI,s:.57,off:laneU(aiLanes[1]),slip:0,wobble:0,lap:-1,pen:0,skill:.72,lane:aiLanes[1],screenPen:0,jump:0,bounce:0,hazard:'',hazardLock:0},{id:3,color:aiColors[2],t:1-46/PERI,s:.56,off:laneU(aiLanes[2]??3),slip:0,wobble:0,lap:-1,pen:0,skill:.9,lane:aiLanes[2]??3,screenPen:0,jump:0,bounce:0,hazard:'',hazardLock:0}];ais=ais.slice(0,4-N);active=false;last=performance.now();braking=false;steering=0;$('overlay').style.display='none';$('brakeWrap').style.display='flex';if(netMode!=='solo'){netStatus('対戦中：'+N+'人で対戦！障害物をかわしてターボで勝負！')}
+function init(fromNet=false){audioInit();hideSignal();clearTimeout(introTimer);intro.on=false;jingleCancel(true);setStage(cupStage);if(netMode==='solo')raceSeed=(Math.random()*1e9)|0;layoutCache.clear();look.x=0;look.y=1;if(netMode==='guest'&&!fromNet){netStatus('ホストがレースを開始するまでお待ちください。');return}time=0;finTimes={};done=false;turboCooldown=0;turboUsed=false;obstacleCooldown=0;obstacleBursts=[];const N=netMode==='solo'?1:Math.max(1,Math.min(4,netHumans||1)),me=netMode==='guest'?netSlot:0,sp=startPerm(),aiLanes=sp.slice(N),aiColors=SLOT_COLORS.slice(N);playerLane=sp[me];remotes={};if(netMode!=='solo'){for(let s=0;s<N;s++){if(s===me)continue;remotes[s]={car:{slot:s,t:1-46/PERI,s:0,off:laneU(sp[s]),lap:-1,color:SLOT_COLORS[s]},last:performance.now()+30000}}}player={id:0,color:SLOT_COLORS[me],boostTimer:0,boostFx:0,perfectBrake:0,t:1-46/PERI,s:.61,off:laneU(playerLane),lane:playerLane,slip:0,wobble:0,spinAngle:0,spinFx:0,spinTimer:0,spinLap:0,lap:-1,pen:0,flash:0,rank:4,screenPen:0,jump:0,bounce:0,hazard:'',hazardLock:0};ais=[{id:1,color:aiColors[0],t:1-46/PERI,s:.58,off:laneU(aiLanes[0]),slip:0,wobble:0,lap:-1,pen:0,skill:.85,lane:aiLanes[0],screenPen:0,jump:0,bounce:0,hazard:'',hazardLock:0},{id:2,color:aiColors[1],t:1-46/PERI,s:.57,off:laneU(aiLanes[1]),slip:0,wobble:0,lap:-1,pen:0,skill:.72,lane:aiLanes[1],screenPen:0,jump:0,bounce:0,hazard:'',hazardLock:0},{id:3,color:aiColors[2],t:1-46/PERI,s:.56,off:laneU(aiLanes[2]??3),slip:0,wobble:0,lap:-1,pen:0,skill:.9,lane:aiLanes[2]??3,screenPen:0,jump:0,bounce:0,hazard:'',hazardLock:0}];ais=ais.slice(0,4-N);active=false;last=performance.now();braking=false;steering=0;$('overlay').style.display='none';$('brakeWrap').style.display='flex';if(netMode!=='solo'){netStatus('対戦中：'+N+'人で対戦！障害物をかわしてターボで勝負！')}
  const token=++startSequenceToken, music=$('raceMusic');
  // Safari requires audio playback to be initiated from the user's tap. Start silently, then unmute on GO.
  bgmStop();
@@ -488,20 +512,46 @@ function camera(){const zN=Math.min(2.55,Math.max(2.05,Math.min(W,H)/300*2.2));
  const focusCar=player,p=at(focusCar.t),fx=p.x+look.x*W*TUNE.lookA/zN,fy=p.y+look.y*H*TUNE.lookA/zN;return{zoom:zN,left:W*.5-fx*zN,top:H*.60-fy*zN,focusCar}}
 function updateLook(dt){const ld=player;if(!ld)return;const n=tan(ld.t),k=Math.min(1,dt*3);look.x+=(n.x-look.x)*k;look.y+=(n.y-look.y)*k}
 function recoverTrailingCars(dt){}
-function hud(){if(!player)return;$('lap').textContent=Math.max(1,Math.min(player.lap+1,3))+' / 3';let racers=[player,...ais,...remoteCars()];let order=racers.sort((a,b)=>progress(b)-progress(a));player.rank=order.indexOf(player)+1;$('pos').textContent=rankLabel(player.rank);$('speed').textContent=Math.round(Math.min(100,player.s/.92*100));$('status').textContent=player.boostTimer>0?'TURBO BOOST! — FULL THROTTLE':dodgeText()}
+function hud(){if(!player)return;$('lap').textContent=Math.max(1,Math.min(player.lap+1,3))+' / 3';let racers=[player,...ais,...remoteCars()];let order=racers.sort((a,b)=>progress(b)-progress(a));player.rank=order.indexOf(player)+1;if(active){for(const c of order){if(c!==player&&progress(c)>=3&&finTimes[c.color]===undefined)finTimes[c.color]=time}}$('pos').textContent=rankLabel(player.rank);$('speed').textContent=Math.round(Math.min(100,player.s/.92*100));$('status').textContent=player.boostTimer>0?'TURBO BOOST! — FULL THROTTLE':dodgeText()}
+// ================= results after every stage: all cars, points, stacked totals, podium =================
+const CNAME=['黄','青','赤','白'],STAGE_COL=['#ffd23a','#52d8ff','#7be37b','#ff8a5c'];
+function carLabel(c){const cw=CNAME[SLOT_COLORS.indexOf(c.color)]||'';if(c===player)return 'あなた';if(c.slot!==undefined)return c.slot===0?'ホスト':'プレイヤー'+cw;return 'CPU '+cw}
+function stageRows(){const p0=-46/PERI,rows=[];
+ for(const c of [player,...ais,...remoteCars()]){const p=progress(c),me=c===player;let tm,est=false;
+  if(me)tm=time;else if(p>=3)tm=Math.min(time,finTimes[c.color]===undefined?time:finTimes[c.color]);else{tm=Math.min(time*4,time+(3-p)*time/Math.max(.001,p-p0));est=true}
+  rows.push({color:c.color,label:carLabel(c),me,tm,est,p})}
+ rows.sort((a,b)=>a.tm-b.tm||b.p-a.p);rows.forEach((r,i)=>r.rank=i+1);return rows}
+function cupRecord(rows,st){for(const r of rows){const e=cupTbl[r.color]||(cupTbl[r.color]={pts:[],pos:[],tm:[]});e.label=r.label;e.me=r.me;e.pts[st-1]=PTS[r.rank]||0;e.pos[st-1]=r.rank;e.tm[st-1]=r.tm}}
+function cupStand(){const a=Object.keys(cupTbl).map(color=>{const e=cupTbl[color];return{color,label:e.label,me:e.me,pts:e.pts,pos:e.pos,total:e.pts.reduce((s,v)=>s+(v||0),0),sum:e.pos.reduce((s,v)=>s+(v||4),0)}});
+ a.sort((u,v)=>v.total-u.total||u.sum-v.sum||lastPos(u)-lastPos(v));return a}
+function lastPos(e){for(let i=e.pos.length-1;i>=0;i--)if(e.pos[i])return e.pos[i];return 9}
+const cpHtml=(color,big)=>'<i class="cp'+(big?' big':'')+'" style="background:'+color+'"></i>';
 function end(){active=false;done=true;raceInit=false;toast('🏁 FINISH!');bgmStop();if(netMode!=='solo')sendNet({type:'finish',slot:netSlot});if(netMode==='host')roomLocked=false;
- const tk=++endToken,rk=player.rank,tm=time,st=cupStage,pt=PTS[rk]||0,lp=player.lap,sp=Math.round(player.s/.82*100);cupRes[st-1]=pt;
- setTimeout(()=>{if(tk!==endToken||raceInit||active)return;
-  // 1) result: position and time
-  $('overlay').classList.remove('title');$('card').innerHTML=`<div class="eyebrow">STAGE ${st} COMPLETE</div><div class="logo">${rk===1?'YOU WIN!':rankLabel(rk)+' PLACE'}</div><div class="subtitle">最終順位 <b>${rk}位 / 4台</b><br>タイム <b>${fmt(tm)}</b></div><div class="rules"><div class="rule"><b>${lp}</b>周完走</div><div class="rule"><b>${sp}%</b>最終速度</div><div class="rule"><b>${rk===1?'GOLD':'RETRY'}</b>RESULT</div></div><div class="note">ポイント集計中…</div>`;
-  $('overlay').style.display='flex';$('brakeWrap').style.display='none';
-  // 2) points: 1st 5 / 2nd 3 / 3rd 1 / 4th 0, then on to the next stage
-  setTimeout(()=>{if(tk!==endToken||raceInit||active)return;
-   const total=cupRes.reduce((a,b)=>a+(b||0),0),cell=i=>cupRes[i]===undefined?'—':'+'+cupRes[i],last=st>=4;cupNextPending=!last;
-   $('card').innerHTML=`<div class="eyebrow">STAGE ${st} POINTS</div><div class="logo">+${pt} PT</div><div class="subtitle">${rk}位 → <b>${pt}ポイント</b><br><span style="opacity:.75">1位 5pt ／ 2位 3pt ／ 3位 1pt ／ 4位 0pt</span></div><div class="rules" style="grid-template-columns:repeat(4,1fr)"><div class="rule"><b>${cell(0)}</b>STAGE 1</div><div class="rule"><b>${cell(1)}</b>STAGE 2</div><div class="rule"><b>${cell(2)}</b>STAGE 3</div><div class="rule"><b>${cell(3)}</b>STAGE 4</div><div class="rule" style="grid-column:1/-1"><b>${total}</b>TOTAL</div></div><button class="cta" id="start">${last?'RACE AGAIN ↻':'STAGE '+(st+1)+' へ ▶'}</button><div class="note">${last?'全ステージの合計ポイントです。':'次はSTAGE '+(st+1)+'（'+['','テーブル','ビリヤード台','ビーチ'][st]+'）です。'}</div>`;
-   $('start').addEventListener('click',startPressed);
-   if(netMode==='guest'){const rb=$('start');rb.textContent=last?'ホストの再開始を待っています…':'ホストの開始を待っています…';rb.style.opacity='.6'}
-  },2600)},450)}
+ const tk=++endToken,st=cupStage,rows=stageRows(),mine=rows.find(r=>r.me),rk=mine.rank,pt=PTS[rk]||0;player.rank=rk;cupRes[st-1]=pt;cupRecord(rows,st);
+ const last=st>=4,alive=()=>tk===endToken&&!raceInit&&!active;let auto=0;
+ const later=(f,ms)=>{clearTimeout(auto);auto=setTimeout(()=>{if(alive())f()},ms)};
+ const showCard=h=>{$('overlay').classList.remove('title');$('card').innerHTML=h;$('overlay').style.display='flex';$('brakeWrap').style.display='none'};
+ const nextBtn=f=>{const b=$('nextBtn');if(b)b.addEventListener('click',()=>{if(alive()){clearTimeout(auto);f()}})};
+ // 1) every car: position and time
+ const s1=()=>{const anyEst=rows.some(r=>r.est);
+  showCard(`<div class="eyebrow">STAGE ${st} RESULT</div><div class="logo">${rk===1?'YOU WIN!':rankLabel(rk)+' PLACE'}</div><div class="rt">${rows.map(r=>`<div class="rr${r.me?' me':''}"><span class="no">${rankLabel(r.rank)}</span>${cpHtml(r.color)}<span class="nm">${r.label}</span><span class="tm">${r.est?'≈':''}${fmt(r.tm)}</span></div>`).join('')}</div><button class="cta" id="nextBtn">ポイントを見る ▶</button>${anyEst?'<div class="note">≈ はゴール前だった車の予想タイムです</div>':''}`);
+  nextBtn(s2);later(s2,7000)};
+ // 2) points earned in this stage (1st 5 / 2nd 3 / 3rd 1 / 4th 0)
+ const s2=()=>{
+  showCard(`<div class="eyebrow">STAGE ${st} POINTS</div><div class="logo">+${pt} PT</div><div class="rt">${rows.map(r=>`<div class="rr${r.me?' me':''}"><span class="no">${rankLabel(r.rank)}</span>${cpHtml(r.color)}<span class="nm">${r.label}</span><span class="pt">+${PTS[r.rank]||0} PT</span></div>`).join('')}</div><div class="note">1位 5pt ／ 2位 3pt ／ 3位 1pt ／ 4位 0pt</div><button class="cta" id="nextBtn">総合結果へ ▶</button>`);
+  nextBtn(s3);later(s3,7000)};
+ // 3) running total, stacked by stage
+ const s3=()=>{const sd=cupStand();cupNextPending=!last;
+  showCard(`<div class="eyebrow">${last?'FINAL TOTAL':'TOTAL AFTER STAGE '+st}</div><div class="logo">総合結果</div><div class="rt">${sd.map((r,i)=>`<div class="rr${r.me?' me':''}"><span class="no">${i+1}位</span>${cpHtml(r.color)}<span class="nm sm">${r.label}</span><div class="sb">${[0,1,2,3].map(k=>`<i style="width:${(r.pts[k]||0)/20*100}%;background:${STAGE_COL[k]};animation-delay:${k*.18}s"></i>`).join('')}</div><span class="pt">${r.total}</span></div>`).join('')}</div><div class="lg">${[0,1,2,3].map(k=>`<span><i style="background:${STAGE_COL[k]}"></i>S${k+1}</span>`).join('')}</div>${last?'<button class="cta" id="nextBtn">表彰式へ ▶</button>':`<button class="cta" id="start">STAGE ${st+1} へ ▶</button><div class="note">次はSTAGE ${st+1}（${['','テーブル','ビリヤード台','ビーチ'][st]}）です。</div>`}`);
+  if(last){nextBtn(s4)}else{$('start').addEventListener('click',startPressed);if(netMode==='guest'){const rb=$('start');rb.textContent='ホストの開始を待っています…';rb.style.opacity='.6'}}};
+ // 4) podium after the last stage
+ const s4=()=>{const sd=cupStand(),me=sd.findIndex(r=>r.me)+1,pod=i=>{const r=sd[i];return r?`<div class="col">${cpHtml(r.color,true)}<div class="pn">${r.label}</div><div class="pp">${r.total} PT</div><div class="blk b${i+1}">${i+1}</div></div>`:'<div class="col"></div>'};
+  const cf=Array.from({length:18},(_,i)=>`<span class="cf" style="left:${(i*37)%100}%;background:${['#ffd23a','#ff6a5c','#52d8ff','#7be37b','#fff'][i%5]};animation-delay:${(i%6)*.45}s;animation-duration:${2.6+(i%4)*.5}s"></span>`).join('');
+  showCard(`<div class="pw">${cf}<div class="eyebrow">GRAND PRIX</div><div class="logo">表彰式</div><div class="pod">${pod(1)}${pod(0)}${pod(2)}</div>${sd[3]?`<div class="rt"><div class="rr${sd[3].me?' me':''}"><span class="no">4位</span>${cpHtml(sd[3].color)}<span class="nm">${sd[3].label}</span><span class="pt">${sd[3].total} PT</span></div></div>`:''}<div class="subtitle">あなたは総合 <b>${me}位</b>（${(sd[me-1]||{total:0}).total}ポイント）</div><button class="cta" id="start">RACE AGAIN ↻</button></div>`);
+  cupNextPending=false;$('start').addEventListener('click',startPressed);
+  if(netMode==='guest'){const rb=$('start');rb.textContent='ホストの再開始を待っています…';rb.style.opacity='.6'}};
+ setTimeout(()=>{if(alive())s1()},450)}
+
 function fmt(s){return Math.floor(s/60)+':'+(s%60).toFixed(2).padStart(5,'0')}
 function rr(a,b,w,h,r){x.beginPath();x.roundRect(a,b,w,h,r)}
 
