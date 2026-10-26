@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="theme-color" content="#13251c"><meta name="dgp-version" content="v69"><title>Desk Grand Prix v69</title>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="theme-color" content="#13251c"><meta name="dgp-version" content="v70"><title>Desk Grand Prix v70</title>
 <style>
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#13251c;color:#f5f4df;font-family:system-ui,-apple-system,sans-serif;touch-action:none}#game{position:relative;width:100vw;height:100dvh;overflow:hidden;background:#193a2a}canvas{width:100%;height:100%;display:block}.hud{position:absolute;top:env(safe-area-inset-top,8px);left:0;right:0;padding:10px 12px;display:flex;justify-content:space-between;pointer-events:none}.pill{background:#0b1b13dd;border:1px solid #ffffff2b;border-radius:13px;padding:7px 11px;min-width:70px}.small{font-size:10px;letter-spacing:.12em;opacity:.75;font-weight:900}.big{font-size:23px;font-weight:1000;line-height:1.1}#status{position:absolute;top:75px;left:50%;transform:translateX(-50%);background:#102319e8;border-radius:99px;padding:7px 12px;font-size:11px;font-weight:900;white-space:nowrap;pointer-events:none}#steerWrap{position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);left:12px;right:12px;display:flex;justify-content:space-between;pointer-events:none;gap:12px} .steer{pointer-events:auto;width:min(23vw,100px);height:82px;border:2px solid #ffffff88;border-radius:18px;background:linear-gradient(#4c91d9,#245a9b);color:white;font-size:30px;font-weight:1000;box-shadow:0 6px 0 #173d6c;touch-action:none;user-select:none} .steer.active{transform:translateY(5px);box-shadow:0 1px 0 #173d6c} #brakeWrap{display:none;position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);left:0;right:0;justify-content:center;pointer-events:none}
 #turbo{pointer-events:auto;position:relative;z-index:30;display:block;margin-top:8px;width:100%;border:2px solid #ffe66d;border-radius:14px;padding:10px 12px;background:linear-gradient(135deg,#f7b928,#f06a26);color:#241407;font-weight:1000;letter-spacing:.08em;box-shadow:0 5px 0 #7c351b;font-size:15px;touch-action:manipulation; -webkit-tap-highlight-color:transparent; user-select:none}
@@ -89,17 +89,52 @@
 .lg{display:flex;justify-content:center;gap:12px;font-size:11px;font-weight:800;opacity:.85;margin-bottom:8px}
 .lg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
 .pw{position:relative;overflow:hidden;padding:2px 0 10px}
-.pod{display:flex;align-items:flex-end;justify-content:center;gap:8px;margin:12px 0 10px}
-.pod .col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0}
-.pod .pn{font-size:12px;font-weight:900;white-space:nowrap}.pod .pp{font:900 italic 13px/1 system-ui;color:#d9ff5a;margin-bottom:2px}
-.pod .blk{width:100%;border-radius:10px 10px 0 0;text-align:center;font:1000 italic 30px/1 system-ui;padding-top:8px;color:#1b1400;box-shadow:inset 0 2px 0 #ffffff80}
-.pod .b1{height:118px;background:linear-gradient(#ffe45a,#e8a800)}.pod .b2{height:86px;background:linear-gradient(#f4f6f8,#aab2ba)}.pod .b3{height:62px;background:linear-gradient(#f0b27a,#b8692c)}
-.cf{position:absolute;top:-14px;width:7px;height:11px;border-radius:2px;opacity:.9;animation:cff 3s linear infinite;pointer-events:none}
-@keyframes cff{to{transform:translateY(560px) rotate(540deg);opacity:.2}}
+.pw>*{position:relative;z-index:2}
+.pw .eyebrow{letter-spacing:.2em}
+.pw .logo{background:linear-gradient(#fff6b0,#ffc400 55%,#ff9a00);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;text-shadow:none;filter:drop-shadow(0 3px 0 #7a4a00);font-size:38px;line-height:1.1;animation:pop .9s cubic-bezier(.2,1.6,.4,1) both}
+.pw .win{font:1000 italic 19px/1.2 system-ui;margin-top:4px;background:linear-gradient(90deg,#fff,#ffd23a,#fff,#ffd23a,#fff);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;animation:shine 1.6s linear infinite,fadeup .6s 1.9s both}
+.pw .rays{position:absolute;z-index:0;left:50%;top:70px;width:560px;height:560px;margin-left:-280px;background:repeating-conic-gradient(from 0deg,#ffd23a40 0 9deg,#ffd23a00 9deg 18deg);-webkit-mask-image:radial-gradient(circle,#000 18%,transparent 66%);mask-image:radial-gradient(circle,#000 18%,transparent 66%);animation:spin 16s linear infinite;pointer-events:none}
+.pw .beam{position:absolute;z-index:1;top:-10px;width:130px;height:430px;background:linear-gradient(#fff4b8cc,#fff4b800);clip-path:polygon(42% 0,58% 0,100% 100%,0 100%);transform-origin:50% 0;mix-blend-mode:screen;animation:sw 3.2s ease-in-out infinite alternate;pointer-events:none}
+.pw .beam.l{left:2%}.pw .beam.r{right:2%;animation-delay:-1.6s;animation-direction:alternate-reverse}
+.pod{display:flex;align-items:flex-end;justify-content:center;gap:6px;margin:34px 0 6px}
+.pod .col{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;animation:rise .85s cubic-bezier(.2,1.25,.4,1) both;animation-delay:var(--d)}
+.pod .c1{flex:1.35}
+.pod .cw{position:relative;width:98px;margin-bottom:-4px;z-index:3;transform-origin:50% 100%}
+.pod .c1 .cw{width:132px;filter:drop-shadow(0 0 12px #ffd23acc);animation:hop 1.15s ease-in-out 2.3s infinite}
+.pod .c2 .cw,.pod .c3 .cw{animation:bob 1.7s ease-in-out infinite}
+.pod .c3 .cw{animation-delay:-.8s}
+.csv{display:block;width:100%;height:auto;overflow:visible}
+.crown{position:absolute;left:50%;top:-24px;width:44px;margin-left:-22px;filter:drop-shadow(0 2px 0 #8a5a00)}
+.pod .blk{position:relative;width:100%;border-radius:12px 12px 0 0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:3px;padding-top:8px;color:#1b1400;box-shadow:inset 0 3px 0 #ffffff99,inset 0 -8px 14px #00000026;overflow:hidden}
+.pod .blk::after{content:"";position:absolute;top:0;bottom:0;width:36%;left:-50%;background:linear-gradient(100deg,#fff0,#ffffffaa,#fff0);transform:skewX(-18deg);animation:sheen 2.6s ease-in-out 2s infinite}
+.pod .blk b{font:1000 italic 36px/1 system-ui}
+.pod .blk .pn{font-size:12px;font-weight:900;white-space:nowrap}
+.pod .blk .pp{font:900 italic 13px/1 system-ui}
+.pod .c1 .blk{height:150px;background:linear-gradient(#ffe45a,#e8a800)}
+.pod .c2 .blk{height:116px;background:linear-gradient(#f6f8fa,#a9b1b9)}
+.pod .c3 .blk{height:90px;background:linear-gradient(#f4b985,#b8692c)}
+.pod .sh{position:absolute;left:50%;top:-5px;width:78%;height:12px;margin-left:-39%;border-radius:50%;background:radial-gradient(#0008,#0000 70%);z-index:1}
+.pod .c1 .sh{animation:shd 1.15s ease-in-out 2.3s infinite}
+.cf{position:absolute;z-index:3;top:-16px;opacity:0;animation:cff 3s linear infinite;pointer-events:none}
+.fp{position:absolute;z-index:3;width:6px;height:6px;border-radius:50%;opacity:0;animation:fpb 1.9s ease-out infinite;pointer-events:none}
+.tw{position:absolute;z-index:3;color:#fff6b0;font-size:16px;animation:tw 1.2s ease-in-out infinite;pointer-events:none;text-shadow:0 0 8px #ffd23a}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes sw{from{transform:rotate(-24deg)}to{transform:rotate(24deg)}}
+@keyframes rise{from{transform:translateY(190px);opacity:0}to{transform:none;opacity:1}}
+@keyframes pop{from{transform:scale(.2);opacity:0}to{transform:none;opacity:1}}
+@keyframes fadeup{from{transform:translateY(10px);opacity:0}to{transform:none;opacity:1}}
+@keyframes shine{to{background-position:-200% 0}}
+@keyframes hop{0%{transform:translateY(0) scale(1.1,.88)}18%{transform:translateY(0) scale(1.1,.88)}42%{transform:translateY(-52px) scale(.93,1.1) rotate(-6deg)}66%{transform:translateY(-52px) scale(.95,1.07) rotate(5deg)}88%{transform:translateY(0) scale(1.1,.88)}100%{transform:translateY(0) scale(1.1,.88)}}
+@keyframes shd{0%,18%,88%,100%{transform:scale(1);opacity:1}42%,66%{transform:scale(.55);opacity:.5}}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-4px) rotate(-1.5deg)}}
+@keyframes sheen{0%{left:-50%}60%,100%{left:130%}}
+@keyframes cff{0%{opacity:1;transform:translateY(0) rotate(0)}100%{opacity:.85;transform:translateY(760px) rotate(620deg)}}
+@keyframes fpb{0%{opacity:1;transform:rotate(var(--a)) translateY(0)}65%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateY(-70px)}}
+@keyframes tw{0%,100%{transform:scale(.4) rotate(0);opacity:.2}50%{transform:scale(1.15) rotate(45deg);opacity:1}}
 </style><script>(function(){var n=0;function show(m){try{if(n++>2)return;var d=document.getElementById('errbar');if(!d){d=document.createElement('div');d.id='errbar';d.style.cssText='position:fixed;left:0;right:0;top:0;z-index:99999;background:#b00020;color:#fff;font:12px/1.35 system-ui,sans-serif;padding:6px 10px;white-space:pre-wrap;word-break:break-all';d.onclick=function(){d.remove()};(document.body||document.documentElement).appendChild(d)}d.textContent+=(d.textContent?'\n':'')+'\u26a0 '+m}catch(e){}}window.__dgpErr=show;window.addEventListener('error',function(e){show((e.message||'error')+(e.lineno?' @'+e.lineno:''))});window.addEventListener('unhandledrejection',function(e){show('promise: '+((e.reason&&e.reason.message)||e.reason))})})();</script>
 <script async src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script></head><body><div id="game"><canvas id="c"></canvas><div class="hud"><div class="pill"><div class="small">LAP</div><div class="big" id="lap">1 / 3</div></div><div class="pill"><div class="small">POSITION</div><div class="big" id="pos">4TH</div></div><div class="pill" style="text-align:right"><div class="small">SPEED</div><div class="big"><span id="speed">100</span><span style="font-size:11px">%</span></div></div></div><div id="status">DODGE THE DESK OBSTACLES!</div><div id="event"></div><div id="startSignal"><i class="lamp"></i><i class="lamp"></i><i class="lamp"></i></div><div id="tip">アクセル自動！左右スワイプで4車線を移動。障害物を避けてターボで追い抜け！</div><div id="brakeWrap"><button id="turbo">⚡ TURBO<span id="turboLabel">タップで一気に加速！（1回だけ）</span></button></div><div id="overlay" class="title"><div class="card" id="card"><div class="tt">
 <div class="tt-bg" id="ttBg"></div>
-<div class="tt-vtag">v69</div>
+<div class="tt-vtag">v70</div>
 <div class="tt-top">
  <div class="tt-logo"><span class="flag fl"></span><span class="flag fr"></span><span class="lg l1" data-t="Desk"><i>Desk</i></span><span class="lg l2" data-t="Grand Prix"><i>Grand Prix</i></span></div>
  <div class="tt-tag"><span>Mini 4WD Racing on Your Desk</span></div>
@@ -111,7 +146,7 @@
  <button class="tt-two" data-open="panel2p">ONLINE RACE<small>2–4 PLAYERS</small></button>
  <div class="tt-small"><button data-open="panelHow">❔ HOW TO</button><button data-open="panelSet">⚙️ SETTING</button><button data-open="panelCred">🏆 CREDITS</button></div>
  <div class="tt-status" id="ttStatus"></div>
- <div class="tt-ver">DESK GRAND PRIX <span id="verTxt">v69</span> <span id="boot">· 読み込み中…</span></div>
+ <div class="tt-ver">DESK GRAND PRIX <span id="verTxt">v70</span> <span id="boot">· 読み込み中…</span></div>
 </div>
 <div class="tt-panel" id="panel2p"><div class="tt-pcard"><h3>🌐 オンライン対戦（2〜4人）</h3>
  <button class="cta" id="host" style="font-size:14px;padding:11px;margin-bottom:8px">部屋を作る（ホスト）</button>
@@ -143,7 +178,7 @@
 const SLOT_COLORS=['#e9f35b','#52d8ff','#ff604e','#f5f3e9'];   // car colour per player slot: host yellow, then blue, red, white
 const NOSOUND=/[?&]nosound\b/.test(location.search);
 const SET={music:true,sfx:true,stage:1};try{Object.assign(SET,JSON.parse(localStorage.getItem('dgp_set')||'{}'))}catch(e){}
-const APP_VERSION='v69';   // <- bump this only: title, top-right tag, credits and meta all follow
+const APP_VERSION='v70';   // <- bump this only: title, top-right tag, credits and meta all follow
 const CREDITS=['Desk Grand Prix '+APP_VERSION,'使用素材（ファイル名）：','BGM：lnplusmusic-retro-vintage-rock-and-roll','ジングル：jingle_12','ブレーキ音：車のブレーキ'];   // edit this list to show the proper credits
 function saveSet(){try{localStorage.setItem('dgp_set',JSON.stringify(SET))}catch(e){}}
 function refreshSet(){for(const [id,k,l] of [['setMusic','music','🎵 音楽 '],['setSfx','sfx','🔊 効果音 ']]){const b=document.getElementById(id);if(!b)continue;b.classList.toggle('off',!SET[k]);b.innerHTML=l+'<b>'+(SET[k]?'ON':'OFF')+'</b>'}}
@@ -526,6 +561,19 @@ function cupStand(){const a=Object.keys(cupTbl).map(color=>{const e=cupTbl[color
  a.sort((u,v)=>v.total-u.total||u.sum-v.sum||lastPos(u)-lastPos(v));return a}
 function lastPos(e){for(let i=e.pos.length-1;i>=0;i--)if(e.pos[i])return e.pos[i];return 9}
 const cpHtml=(color,big)=>'<i class="cp'+(big?' big':'')+'" style="background:'+color+'"></i>';
+function shade(hex,amt){const n=parseInt(String(hex).slice(1),16),r=n>>16,g=n>>8&255,b=n&255,f=c=>Math.max(0,Math.min(255,Math.round(amt>0?c+(255-c)*amt:c*(1+amt))));return '#'+[f(r),f(g),f(b)].map(v=>v.toString(16).padStart(2,'0')).join('')}
+// podium car: chunky 4WD van seen from the side, in the car's own colour, numbered with its place
+function carSvg(color,num,uid){const lt=shade(color,.4),dk=shade(color,-.38),wh=cx=>`<path d="M${cx-19} 52 A19 19 0 0 1 ${cx+19} 52 Z" fill="#0000006e"/><circle cx="${cx}" cy="56" r="15" fill="#1a1a1a"/><circle cx="${cx}" cy="56" r="15" fill="none" stroke="#000" stroke-width="3" stroke-dasharray="3.2 3.2"/><circle cx="${cx}" cy="56" r="9" fill="#8d949b"/><circle cx="${cx}" cy="56" r="4.6" fill="#e3e7ea"/>`;
+ return `<svg class="csv" viewBox="0 0 124 74" aria-hidden="true"><defs><linearGradient id="cg${uid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${lt}"/><stop offset=".55" stop-color="${color}"/><stop offset="1" stop-color="${dk}"/></linearGradient><linearGradient id="cw${uid}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e6f8ff"/><stop offset="1" stop-color="#7fb4d0"/></linearGradient></defs>
+ <path d="M8 51 L8 37 Q8 31 14 30 L32 28 L44 15 Q46 13 50 13 L90 13 Q94 13 96 16 L106 30 Q112 31 114 36 L116 51 Z" fill="url(#cg${uid})" stroke="${dk}" stroke-width="1.6" stroke-linejoin="round"/>
+ <path d="M47 19 L73 19 L73 29 L38 29 Z" fill="url(#cw${uid})"/><path d="M77 19 L89 19 L98 29 L77 29 Z" fill="url(#cw${uid})"/><path d="M50 21 L58 21 L52 28 L45 28 Z" fill="#fff" opacity=".55"/>
+ <path d="M12 46 Q28 38 44 44 Q58 36 74 43 Q90 37 112 45 L112 49 L12 49 Z" fill="#fff" opacity=".92"/><path d="M12 46 Q28 38 44 44 Q58 36 74 43 Q90 37 112 45" fill="none" stroke="${dk}" stroke-width="1.4" opacity=".6"/>
+ <circle cx="61" cy="38" r="8.6" fill="#fff" stroke="${dk}" stroke-width="1.4"/><text x="61" y="42.4" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="900" fill="#1b1b1b">${num}</text>
+ <rect x="2" y="47" width="9" height="5" rx="2" fill="#2b2b2b"/><rect x="113" y="47" width="9" height="5" rx="2" fill="#2b2b2b"/>
+ <circle cx="113" cy="39" r="3.2" fill="#fff7b0" stroke="#e0b800" stroke-width=".8"/><rect x="7" y="36" width="3.4" height="6" rx="1.4" fill="#e23a2a"/>
+ <rect x="52" y="8" width="26" height="4" rx="2" fill="${dk}"/><rect x="55" y="6" width="3" height="3" fill="#ffd23a"/><rect x="62" y="6" width="3" height="3" fill="#ffd23a"/><rect x="69" y="6" width="3" height="3" fill="#ffd23a"/>
+ ${wh(32)}${wh(92)}</svg>`}
+const CROWN_SVG='<svg class="crown" viewBox="0 0 44 30"><path d="M3 26 L6 8 L15 17 L22 3 L29 17 L38 8 L41 26 Z" fill="#ffd23a" stroke="#c98a00" stroke-width="2" stroke-linejoin="round"/><rect x="3" y="24" width="38" height="5" rx="2" fill="#f5b800" stroke="#c98a00" stroke-width="1.6"/><circle cx="22" cy="3" r="2.6" fill="#ff4d5e"/><circle cx="6" cy="8" r="2.2" fill="#52d8ff"/><circle cx="38" cy="8" r="2.2" fill="#7be37b"/></svg>';
 function end(){active=false;done=true;raceInit=false;toast('🏁 FINISH!');bgmStop();if(netMode!=='solo')sendNet({type:'finish',slot:netSlot});if(netMode==='host')roomLocked=false;
  const tk=++endToken,st=cupStage,rows=stageRows(),mine=rows.find(r=>r.me),rk=mine.rank,pt=PTS[rk]||0;player.rank=rk;cupRes[st-1]=pt;cupRecord(rows,st);
  const last=st>=4,alive=()=>tk===endToken&&!raceInit&&!active;let auto=0;
@@ -544,10 +592,13 @@ function end(){active=false;done=true;raceInit=false;toast('🏁 FINISH!');bgmSt
  const s3=()=>{const sd=cupStand();cupNextPending=!last;
   showCard(`<div class="eyebrow">${last?'FINAL TOTAL':'TOTAL AFTER STAGE '+st}</div><div class="logo">総合結果</div><div class="rt">${sd.map((r,i)=>`<div class="rr${r.me?' me':''}"><span class="no">${i+1}位</span>${cpHtml(r.color)}<span class="nm sm">${r.label}</span><div class="sb">${[0,1,2,3].map(k=>`<i style="width:${(r.pts[k]||0)/20*100}%;background:${STAGE_COL[k]};animation-delay:${k*.18}s"></i>`).join('')}</div><span class="pt">${r.total}</span></div>`).join('')}</div><div class="lg">${[0,1,2,3].map(k=>`<span><i style="background:${STAGE_COL[k]}"></i>S${k+1}</span>`).join('')}</div>${last?'<button class="cta" id="nextBtn">表彰式へ ▶</button>':`<button class="cta" id="start">STAGE ${st+1} へ ▶</button><div class="note">次はSTAGE ${st+1}（${['','テーブル','ビリヤード台','ビーチ'][st]}）です。</div>`}`);
   if(last){nextBtn(s4)}else{$('start').addEventListener('click',startPressed);if(netMode==='guest'){const rb=$('start');rb.textContent='ホストの開始を待っています…';rb.style.opacity='.6'}}};
- // 4) podium after the last stage
- const s4=()=>{const sd=cupStand(),me=sd.findIndex(r=>r.me)+1,pod=i=>{const r=sd[i];return r?`<div class="col">${cpHtml(r.color,true)}<div class="pn">${r.label}</div><div class="pp">${r.total} PT</div><div class="blk b${i+1}">${i+1}</div></div>`:'<div class="col"></div>'};
-  const cf=Array.from({length:18},(_,i)=>`<span class="cf" style="left:${(i*37)%100}%;background:${['#ffd23a','#ff6a5c','#52d8ff','#7be37b','#fff'][i%5]};animation-delay:${(i%6)*.45}s;animation-duration:${2.6+(i%4)*.5}s"></span>`).join('');
-  showCard(`<div class="pw">${cf}<div class="eyebrow">GRAND PRIX</div><div class="logo">表彰式</div><div class="pod">${pod(1)}${pod(0)}${pod(2)}</div>${sd[3]?`<div class="rt"><div class="rr${sd[3].me?' me':''}"><span class="no">4位</span>${cpHtml(sd[3].color)}<span class="nm">${sd[3].label}</span><span class="pt">${sd[3].total} PT</span></div></div>`:''}<div class="subtitle">あなたは総合 <b>${me}位</b>（${(sd[me-1]||{total:0}).total}ポイント）</div><button class="cta" id="start">RACE AGAIN ↻</button></div>`);
+ // 4) podium after the last stage: car art on the steps, the champion hops
+ const s4=()=>{const sd=cupStand(),me=sd.findIndex(r=>r.me)+1,champ=sd[0],COL=['#ffd23a','#ff6a5c','#52d8ff','#7be37b','#ffffff','#ff8ad8'];
+  const col=(i,cls,d)=>{const r=sd[i];return r?`<div class="col ${cls}" style="--d:${d}s"><div class="cw">${i===0?CROWN_SVG:''}${carSvg(r.color,i+1,'p'+i)}</div><div class="blk"><i class="sh"></i><b>${i+1}</b><span class="pn">${r.label}</span><span class="pp">${r.total} PT</span></div></div>`:'<div class="col"></div>'};
+  const cf=Array.from({length:44},(_,i)=>`<span class="cf" style="left:${(i*23+7)%100}%;width:${5+(i%3)*3}px;height:${8+(i%4)*3}px;border-radius:${i%3===0?'50%':'2px'};background:${COL[i%6]};animation-delay:${1.5+(i%11)*.27}s;animation-duration:${2.4+(i%5)*.45}s"></span>`).join('');
+  const fw=[[16,24,1.8],[84,20,2.3],[50,38,2.8],[30,12,3.3],[72,34,3.7]].map(([lx,ty,dl],k)=>Array.from({length:12},(_,i)=>`<span class="fp" style="left:${lx}%;top:${ty}%;--a:${i*30}deg;background:${COL[(i+k)%6]};animation-delay:${dl}s;animation-duration:${1.7+k*.12}s"></span>`).join('')).join('');
+  const tw=[[8,38],[92,44],[22,60],[78,62],[44,26],[60,52]].map(([lx,ty],i)=>`<span class="tw" style="left:${lx}%;top:${ty}%;animation-delay:${i*.23}s">✦</span>`).join('');
+  showCard(`<div class="pw"><div class="rays"></div><div class="beam l"></div><div class="beam r"></div>${cf}${fw}${tw}<div class="eyebrow">🏆 GRAND PRIX 🏆</div><div class="logo">表彰式</div><div class="win">${champ.me?'あなたが総合優勝！！':'👑 '+champ.label+' が総合優勝！'}</div><div class="pod">${col(1,'c2',.8)}${col(0,'c1',1.5)}${col(2,'c3',.2)}</div>${sd[3]?`<div class="rt"><div class="rr${sd[3].me?' me':''}"><span class="no">4位</span>${cpHtml(sd[3].color)}<span class="nm">${sd[3].label}</span><span class="pt">${sd[3].total} PT</span></div></div>`:''}<div class="subtitle">あなたは総合 <b>${me}位</b>（${(sd[me-1]||{total:0}).total}ポイント）</div><button class="cta" id="start">RACE AGAIN ↻</button></div>`);
   cupNextPending=false;$('start').addEventListener('click',startPressed);
   if(netMode==='guest'){const rb=$('start');rb.textContent='ホストの再開始を待っています…';rb.style.opacity='.6'}};
  setTimeout(()=>{if(alive())s1()},450)}
